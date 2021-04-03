@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    backendURL: 'http://localhost:4000',
-    frontendURL: 'http://localhost:3000',
+    backendURL: 'https://dry-beyond-65776.herokuapp.com',
+    frontendURL: 'https://react-node-send-cliente.vercel.app',
   }
 }
