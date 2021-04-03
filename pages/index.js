@@ -20,7 +20,10 @@ const Home =() => {
   const { mensaje_archivo, url } = AppContext;
   // extaer ussuario autenticado del storage
   useEffect(() => {
-    usuarioAutenticado();
+    const token = localStorage.getItem( 'reactSendToken' );
+    if( token ){
+      usuarioAutenticado();
+    }
   }, [])
   return (
     <Layout>

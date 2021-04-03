@@ -20,9 +20,9 @@ const authReducer = (state, action) => {
       case LOGIN_EXITOSO:
        localStorage.setItem('reactSendToken', action.payload);
         return {
-            ...state,
-            token: action.payload,
-            autenticado : true
+          ...state,
+          token: action.payload,
+          autenticado : true
         }
       break;  
       case  LIMPIAR_ALERTA:
@@ -33,7 +33,8 @@ const authReducer = (state, action) => {
       case USUARIO_AUTENTICADO:
         return{
           ...state,
-          usuario : action.payload
+          usuario : action.payload,
+          autenticado : true
         }
       case CERRAR_SESION:
         localStorage.removeItem( 'reactSendToken' );

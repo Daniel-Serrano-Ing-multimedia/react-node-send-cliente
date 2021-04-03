@@ -11,7 +11,10 @@ import{
   SUBIR_ARCHIVO_EXITO,
   SUBIR_ARCHIVO_ERROR,
   CREAR_ENLACE_EXITO,
-  CREAR_ENLACE_ERROR
+  CREAR_ENLACE_ERROR,
+  LIMPIAR_STATE,
+  AGREGAR_PASSWORD,
+  AGREGAR_DESCARGAS
 } from '../../types';
 
 const Appstate = ( {children }) => {
@@ -79,15 +82,41 @@ const Appstate = ( {children }) => {
     }
     try {
       const resultado = await clienteAxios.post( '/api/enlaces', data );
-      console.log( 'enlace : ',  resultado.data.msg )
       dispatch({
         type : CREAR_ENLACE_EXITO,
         payload: resultado.data.msg
       })
     } catch (error) {
       console.log( error )
+       dispatch({
+        type : CREAR_ENLACE_ERROR,
+        payload: error.response.dasta.msg
+      });
     }
   }
+  // Limpiar State
+  const limpiarState = () => {
+    dispatch({
+      type: LIMPIAR_STATE
+    })
+  }
+
+  // Agregar Password
+  const agregarDescargas = descargas => {
+    dispatch({
+      type : AGREGAR_DESCARGAS,
+      payload: descargas
+    })
+  }
+
+// Agregar Password
+const agregarPassword = password => {
+  dispatch({
+    type : AGREGAR_PASSWORD,
+    payload: password
+  })
+}
+
   return(
     <appContext.Provider
       value = {{
@@ -101,7 +130,10 @@ const Appstate = ( {children }) => {
         url: state.url,
         mostrarAlerta,
         subirArchivo,
-        crearEnlace
+        crearEnlace,
+        limpiarState,
+        agregarPassword,
+        agregarDescargas,
       }}
     >
       { children }

@@ -23,7 +23,7 @@ const AuthState = ({ children }) => {
     autenticado : false,
     usuario: null,
     mensaje: null,
-    cargando : true
+    cargando : null
   }
   // definir el reducer
   const [ state, dispatch ] = useReducer( authReducer, initialState );
@@ -79,18 +79,21 @@ const AuthState = ({ children }) => {
   // Retorna usuario autenticado a partir de jwt
   const usuarioAutenticado = async () =>{
     const token = localStorage.getItem( 'reactSendToken' );
-    if( token ){
-      tokenAuth( token );
-    }
+    
+    tokenAuth( token );
     try {
       const respuesta = await clienteAxios.get( '/api/auth' ) ;
-      console.log( 'res' ,respuesta.data.usuario );
-      dispatch({
-        type: USUARIO_AUTENTICADO,
-        payload : respuesta.data.usuario
-      })
+      if( respuesta.data.usuario ){
+        dispatch({
+          type: USUARIO_AUTENTICADO,
+          payload : respuesta.data.usuario
+        });
+      }
     } catch (error) {
-      
+      dispatch({
+        type : LOGIN_ERREOR,
+        payload: error.response.data.msg
+      })
     }
   }
   //cerrar Sesion
