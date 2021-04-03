@@ -49,7 +49,7 @@ const EnlaceDescarga = ({ enlace }) => {
     <Layout>
 			{tienePasword ?
 					<>
-						<p className = 'text-center'>Este enlace esta protegido por un password :</p>
+						<p className = 'text-center'>Este archivo esta protegido por un password :</p>
 						{ mensaje_archivo && <Alerta/> }
 						<div className = 'flex justify-center mt-5'>
 							<div className = 'w-full max-w-lg'>
