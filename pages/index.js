@@ -1,65 +1,67 @@
-import Head from 'next/head'
+import React, { useContext, useEffect } from 'react';
+// context
+import authContext from '../context/auth/authContext';
+import appContext from '../context/app/appContex';
+// components
+import Layout from '../components/Layout';
+import Dropzone from '../components/dropzone';
+import Alerta from '../components/alerta';
+// roting
+import Linnk from 'next/link';
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+const Home =() => {
+  // acceder al state de context
+  const AuthContext = useContext( authContext );
+  const { autenticado, usuarioAutenticado } = AuthContext;
+
+  // acceder al state de context
+  const AppContext = useContext( appContext );
+  const { mensaje_archivo, url } = AppContext;
+  // extaer ussuario autenticado del storage
+  useEffect(() => {
+    usuarioAutenticado();
+  }, [])
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+    <Layout>
+      <div className = 'md:w4/5 xl:w-3/5 ma-auto mb-32'>
+        { url ?  
+          <>
+            <p className = 'text-center text-2xl mt-10'>
+              <span className = 'font-bold text-red-700 text-3xl uppercase' >Tu Url es :</span>
+               { `${process.env.frontendURL}/enlaces/${url}` }
             </p>
-          </a>
-        </div>
-      </main>
+            <button
+              type = 'submit'
+              className = 'bg-gray-900 hover:bg-red-500 w-full p-2 text-white uppercase font-bold mt-10'
+              onClick = { ()  => navigator.clipboard.writeText( `${process.env.frontendURL}/enlaces/${url}` ) }
+            >Copiar Enlace</button>
+          </>
+          :
+          <>
+            { mensaje_archivo && <Alerta/> }
+            <div className= 'lg:flex md:shadow-lg p-5 bg-white rounded-lg py-10'>
+              <Dropzone/>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+              <div className = 'md:flex-1 mb-3 mx-2 mt-16 lg:mt-0'>
+                <h2 className = 'text-4xt font-sans font-bold text-gray-800 my-4'
+                >Compartir Archivos de forma sencilla y privada</h2>
+               <p className = 'text-lg leading-loose'>
+                 <span className = 'text-red-500 font-bold'>ReactNodeSend </span>
+                   te permite compartir archivos con cifrado de extremo a extremo y un archivo que es eliminado
+                   despues de ser descargado. Así que puedes mantener lo que compartes en privado y asegurarte
+                   de que tus cosas no permanescan en linea siempre
+               </p>
+               <Linnk href = '/crearcuenta'>
+                 <a className = 'text-red-500 font-bold text-lg hover:text-red-700'>Crea una cuenta para mayores benficios</a>
+               </Linnk>
+              </div>
+            </div>
+          </>
+        }
+      </div>
+    </Layout>
   )
 }
+
+export default Home;
